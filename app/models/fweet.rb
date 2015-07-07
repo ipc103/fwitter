@@ -1,4 +1,4 @@
-require "../../config/environment.rb"
+require_relative "../../config/environment.rb"
 class Fweet
   ALL_TWEETS = []
   attr_accessor :content
