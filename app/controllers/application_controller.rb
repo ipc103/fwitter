@@ -1,5 +1,5 @@
-require_relative "../../config/environment.rb"
-require_relative "../models/fweet.rb"
+require "../../config/environment.rb"
+require "../models/fweet.rb"
 class ApplicationController < Sinatra::Base
   
   configure do
@@ -16,7 +16,14 @@ class ApplicationController < Sinatra::Base
   post '/' do
     Fweet.create(:user => params[:user], :content => params[:fweet])
     @fweets = Fweet.all
+    @first_fweet = Fweet.first
+    @last_fweet = Fweet.last
+    @my_tweet = Fweet.find_by(user: "Ian")
+    @fourth_fweet = Fweet.find(4)
+    @by_sql = Fweet.find_by_sql("SELECT * FROM fweets")
     erb :index
   end
+
+
   
 end
