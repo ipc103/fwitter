@@ -8,17 +8,13 @@ class ApplicationController < Sinatra::Base
   end
   
   get "/" do
-    Fweet.new("Giancarlo", "I don't know")
-    Fweet.new("Alejandro", "I'm all right #ChristopherCross")
-    Fweet.new("Daniel", "*shrug - anything")
-    Fweet.new("Charles", "How do I use this?")
-    Fweet.new("John", "What's up?")
+#     Fweet.create("Giancarlo", "I don't know")
     @fweets = Fweet.all
     erb :index
   end
   
   post '/' do
-    Fweet.new(params[:user], params[:fweet])
+    Fweet.create(:user => params[:user], :content => params[:fweet])
     @fweets = Fweet.all
     erb :index
   end
