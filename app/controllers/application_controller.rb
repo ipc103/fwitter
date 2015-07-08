@@ -15,6 +15,12 @@ class ApplicationController < Sinatra::Base
   
   post '/' do
     Fweet.create(:user => params[:user], :content => params[:fweet])
+    # @fweet = Fweet.new
+    # @fweet.user = params[:user]
+    # @fweet.content = params[:content]
+    # @fweet.save
+
+
     @fweets = Fweet.all
     @first_fweet = Fweet.first
     @last_fweet = Fweet.last
