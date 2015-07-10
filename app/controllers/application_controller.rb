@@ -1,18 +1,25 @@
 require_relative "../../config/environment.rb"
 require_relative "../models/fweet.rb"
 require_relative "../models/user.rb"
+require "pry"
 class ApplicationController < Sinatra::Base
   
   configure do
     set :public_folder, 'public'
     set :views, 'app/views'
+    set :sessions, true
+    set :session_secret, "fwitter"
   end
   
   get "/" do
 #     Fweet.create("Giancarlo", "I don't know")
-    @users = User.all
-    @fweets = Fweet.all # We set an instance variable, @fweets, which will be an array containing every Fweet from our database. 
-    erb :index
+    if logged_in?
+      @users = User.all
+      @fweets = Fweet.all # We set an instance variable, @fweets, which will be an array containing every Fweet from our database. 
+      erb :index
+    else
+      redirect "/login"
+    end
   end
   
   post '/' do
@@ -35,6 +42,20 @@ class ApplicationController < Sinatra::Base
     redirect to("/")
   end
   
+  get "/login" do
+    erb :login
+  end
+  
+  post "/login" do
+    @user = User.find_by(username: params[:username])
+    if @user
+      session[:user_id] = @user.id
+      redirect to "/"
+    else
+      redirect "/login"
+    end
+  end
+  
   get "/new_user" do
     erb :new_user
   end
@@ -42,6 +63,21 @@ class ApplicationController < Sinatra::Base
   post "/new_user" do
     User.create(username: params[:username], first_name: params[:firstname], last_name: params[:lastname])
     redirect to("/")
+  end
+  
+  get '/logout' do
+    session[:user_id] = nil
+    redirect "/login"
+  end
+  
+  ### HELPER METHODS 
+  
+  def current_user
+    User.find(session[:user_id])
+  end
+  
+  def logged_in?
+    session[:user_id]
   end
   
 end
