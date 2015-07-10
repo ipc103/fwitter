@@ -9,6 +9,5 @@ gem "rake"
 group :development do
   gem "pry"
   gem "shotgun"
-  gem "tux"
   gem "sqlite3"
 end
